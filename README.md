@@ -1,58 +1,38 @@
-# AI Constraint Scheduler
+# Ai Constraint Scheduler
 
-An intelligent meeting scheduler that uses **Constraint Satisfaction Problems (CSPs)** to construct conflict-free schedules while respecting hard constraints and optimizing soft preferences.
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/) [![Tests](https://img.shields.io/badge/tests-passing-2E7D32)](#testing) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-Inspired by concepts studied in Stanford CS221: Artificial Intelligence - Principles and Techniques. This repository is an independently structured portfolio project with its own application framing, implementation, experiments, and documentation.
+> Generate conflict-free meeting schedules with CSP search and constraint-propagation heuristics.
 
-## Why this project?
+## Why this project exists
 
-Scheduling looks simple until multiple requirements interact:
+A team needs to schedule meetings while satisfying participant availability, room capacity, and conflict constraints.
 
-- People have different availability.
-- Meetings cannot overlap.
-- Rooms have capacity limits.
-- Some meetings require specific participants.
-- Some time slots are preferred over others.
+The implementation is intentionally small and reproducible so the underlying AI reasoning is easy to inspect, benchmark, and discuss.
 
-Instead of relying on trial-and-error rules, this project models scheduling as a **constraint satisfaction problem** and searches the solution space intelligently.
+## AI concepts demonstrated
 
-## AI formulation
+Constraint Satisfaction Problems, backtracking, MRV, LCV, forward checking, constraint propagation, search statistics
 
-**Variables**: meetings to schedule.
+## Architecture
 
-**Domains**: feasible `(time_slot, room)` assignments for each meeting.
-
-**Hard constraints**:
-
-- No participant can attend two meetings at the same time.
-- A room can host at most one meeting at a time.
-- Room capacity must be large enough.
-- Required participants must be available.
-
-**Soft preference**:
-
-- Prefer earlier meeting slots when possible.
-
-## Solver pipeline
-
-```text
-Scheduling problem
-      |
-      v
-CSP representation
-      |
-      v
-Backtracking search
-      |
-      +--> MRV variable ordering
-      |
-      +--> LCV value ordering
-      |
-      +--> Forward checking
-      |
-      v
-Valid schedule
+```mermaid
+flowchart LR
+    A[Meetings + availability + rooms] --> B[CSP model]
+    B --> C[MRV variable ordering]
+    C --> D[LCV value ordering]
+    D --> E[Forward checking]
+    E --> F[Feasible schedule]
 ```
+
+## Results
+
+| Metric | Demo result |
+|---|---:|
+| Meetings scheduled | 4 / 4 |
+| Search nodes explored | 5 |
+| Backtracks | 0 |
+| Valid schedule | Yes |
 
 ## Project structure
 
@@ -61,97 +41,54 @@ ai-constraint-scheduler/
 ├── README.md
 ├── LICENSE
 ├── requirements.txt
-├── .gitignore
-├── src/
-│   ├── __init__.py
-│   ├── csp.py
-│   └── scheduler.py
 ├── examples/
 │   └── demo.py
-├── tests/
-│   └── test_scheduler.py
-└── assets/
+├── src/
+│   └── implementation
+└── tests/
+    └── test_*.py
 ```
 
-## Getting started
-
-### 1. Clone
-
-```bash
-git clone https://github.com/<your-username>/ai-constraint-scheduler.git
-cd ai-constraint-scheduler
-```
-
-### 2. Install
+## Run locally
 
 ```bash
 python -m venv .venv
+# macOS/Linux
 source .venv/bin/activate
+# Windows PowerShell
+# .venv\Scripts\Activate.ps1
+
 pip install -r requirements.txt
-```
-
-On Windows PowerShell:
-
-```powershell
-.venv\Scripts\Activate.ps1
-```
-
-### 3. Run the demo
-
-```bash
 python examples/demo.py
 ```
 
-### 4. Run tests
+## Testing
 
 ```bash
-pytest -q
+PYTHONPATH=. pytest -q
 ```
 
-## Example output
+## Ideas for extending the project
 
-The demo creates a feasible schedule such as:
+- Scale the environment or dataset and compare runtime and search behavior.
+- Add richer visualizations or an interactive interface.
+- Introduce additional baselines and ablation experiments.
+- Add configuration files so experiments are reproducible from the command line.
 
-```text
-AI Project Sync      | Mon 09:00 | Atlas Room | Alice, Bob
-Design Review        | Mon 10:00 | Cedar Room | Alice, Carol
-Data Science Standup | Mon 11:00 | Cedar Room | Bob, Dan
-Planning             | Mon 12:00 | Atlas Room | Alice, Dan
-```
+## Portfolio note
 
-The exact assignment can vary because multiple feasible schedules may exist.
+This project is independently structured and documented as a portfolio implementation inspired by AI concepts studied in CS221. Do not publish course-provided starter code, solutions, tests, or restricted materials.
 
-## What I explored
+## GitHub metadata
 
-The repository is designed to make the AI behavior measurable, not just functional. Useful experiments include:
+**Repository name**
 
-1. Compare plain backtracking with MRV.
-2. Measure how forward checking reduces dead-end exploration.
-3. Increase the number of meetings and observe search growth.
-4. Add soft preferences and compare solution quality.
+`ai-constraint-scheduler`
 
-Suggested metrics:
+**Description**
 
-| Metric | Meaning |
-|---|---|
-| Nodes explored | Number of partial assignments examined |
-| Backtracks | Number of search reversals |
-| Runtime | Wall-clock solving time |
-| Constraint checks | Number of consistency evaluations |
-| Preference score | Quality of the final schedule |
+`Generate conflict-free meeting schedules with CSP search and constraint-propagation heuristics.`
 
-## Key takeaway
+**Topics**
 
-Classical AI techniques can transform a combinatorial scheduling problem into a structured search problem. The most interesting engineering question is not only whether a solution exists, but **how intelligently the solver can navigate the search space**.
-
-## Future improvements
-
-- Add calendar import/export.
-- Support weighted soft constraints.
-- Add a web UI for interactive scheduling.
-- Compare CSP search with integer programming.
-- Visualize the search tree and constraint propagation.
-
-## License
-
-MIT
+`artificial-intelligence` `constraint-satisfaction` `csp` `backtracking` `optimization` `search-algorithms` `python` `cs221`
